@@ -9,7 +9,8 @@
       content="Portfolio da Agência Winc com categorias de identidade visual, artes impressas, criativos, landing pages e soluções digitais."
     />
     <meta name="theme-color" content="#05080c" />
-    <meta name="robots" content="index,follow" />
+    <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+    <meta name="format-detection" content="telephone=no" />
     <meta name="application-name" content="Agência Winc" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
@@ -19,34 +20,77 @@
       property="og:description"
       content="Veja categorias de projetos e frentes criativas da Agência Winc."
     />
-    <meta property="og:url" content="https://agenciawinc.com/portfolio.html" />
-    <meta property="og:image" content="https://agenciawinc.com/assets/portfolio-street-pro.png" />
+    <meta property="og:url" content="https://agenciawinc.netlify.app/portfolio" />
+    <meta property="og:image" content="https://agenciawinc.netlify.app/assets/portfolio-street-pro.png" />
+    <meta property="og:image:alt" content="Cases de identidade visual e materiais gráficos da Agência Winc" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Portfolio | Agência Winc" />
     <meta
       name="twitter:description"
       content="Veja categorias de projetos e frentes criativas da Agência Winc."
     />
-    <meta name="twitter:image" content="https://agenciawinc.com/assets/portfolio-street-pro.png" />
-    <link rel="canonical" href="https://agenciawinc.com/portfolio.html" />
-    <link rel="icon" type="image/png" sizes="256x256" href="./assets/favicon.png" />
-    <link rel="manifest" href="./site.webmanifest" />
+    <meta name="twitter:image" content="https://agenciawinc.netlify.app/assets/portfolio-street-pro.png" />
+    <link rel="canonical" href="https://agenciawinc.netlify.app/portfolio" />
+    <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="image" href="/assets/logo-winc-web.webp" />
+    <link rel="preload" as="image" href="/assets/portfolio-street-pro.webp" />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "CollectionPage",
+            "name": "Portfolio | Agência Winc",
+            "url": "https://agenciawinc.netlify.app/portfolio",
+            "isPartOf": {
+              "@type": "WebSite",
+              "name": "Agência Winc",
+              "url": "https://agenciawinc.netlify.app/"
+            },
+            "about": [
+              "Identidade visual",
+              "Materiais gráficos",
+              "Social media",
+              "Landing pages"
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Início",
+                "item": "https://agenciawinc.netlify.app/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Portfolio",
+                "item": "https://agenciawinc.netlify.app/portfolio"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div class="page-shell">
       <header class="site-header">
         <div class="container nav-wrap">
-          <a class="brand" href="./index.html" aria-label="Agência Winc">
+          <a class="brand" href="/" aria-label="Agência Winc">
             <img
               class="brand-logo"
-              src="./assets/logo-winc-web.png"
+              src="/assets/logo-winc-web.webp"
               alt="Logo da Agência Winc"
               width="1200"
               height="399"
@@ -54,11 +98,11 @@
           </a>
 
           <nav class="site-nav" aria-label="Principal">
-            <a href="./index.html#inicio">Início</a>
-            <a href="./portfolio.html" aria-current="page">Portfolio</a>
-            <a href="./index.html#servicos">Serviços</a>
-            <a href="./index.html#solucoes">Soluções</a>
-            <a href="./index.html#contato">Contato</a>
+            <a href="/#inicio">Início</a>
+            <a href="/portfolio" aria-current="page">Portfolio</a>
+            <a href="/#servicos">Serviços</a>
+            <a href="/#solucoes">Soluções</a>
+            <a href="/#contato">Contato</a>
           </nav>
         </div>
       </header>
@@ -81,7 +125,7 @@
                 <a class="button button-primary" href="https://wa.me/558291875154" target="_blank" rel="noopener noreferrer">
                   Solicitar apresentação
                 </a>
-                <a class="button button-secondary" href="./index.html">
+                <a class="button button-secondary" href="/">
                   Voltar para o site
                 </a>
               </div>
@@ -163,7 +207,7 @@
               <article class="portfolio-project portfolio-project-wide">
                 <div class="portfolio-project-media portfolio-project-media-light">
                   <img
-                    src="./assets/portfolio-street-pro.png"
+                    src="/assets/portfolio-street-pro.webp"
                     alt="Apresentação da identidade visual Street Pro Detailing com logo, criativo automotivo, aplicação em fachada e camiseta."
                     width="935"
                     height="527"
@@ -204,7 +248,7 @@
               <article class="portfolio-project">
                 <div class="portfolio-project-media portfolio-project-media-light">
                   <img
-                    src="./assets/portfolio-vital-frota.png"
+                    src="/assets/portfolio-vital-frota.webp"
                     alt="Apresentação da comunicação visual da Vital com aplicações em veículos."
                     width="345"
                     height="304"
@@ -224,7 +268,7 @@
               <article class="portfolio-project">
                 <div class="portfolio-project-media portfolio-project-media-light">
                   <img
-                    src="./assets/portfolio-clinic-book.png"
+                    src="/assets/portfolio-clinic-book.webp"
                     alt="Folder e apresentação impressa da Clinic Book com QR code e páginas internas."
                     width="344"
                     height="402"
@@ -244,7 +288,7 @@
               <article class="portfolio-project">
                 <div class="portfolio-project-media portfolio-project-media-light">
                   <img
-                    src="./assets/portfolio-mundo-acai.png"
+                    src="/assets/portfolio-mundo-acai.webp"
                     alt="Artes de windbanner do Mundo do Açaí prontas para impressão."
                     width="1118"
                     height="255"
@@ -279,10 +323,10 @@
 
       <footer class="site-footer">
         <div class="container footer-wrap">
-          <a class="footer-brand" href="./index.html" aria-label="Agência Winc">
+          <a class="footer-brand" href="/" aria-label="Agência Winc">
             <img
               class="footer-logo"
-              src="./assets/logo-winc-web.png"
+              src="/assets/logo-winc-web.webp"
               alt="Logo da Agência Winc"
               width="1200"
               height="399"
