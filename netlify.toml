@@ -6,51 +6,6 @@
   to = "/"
   status = 301
 
-[[redirects]]
-  from = "/portfolio.html"
-  to = "/portfolio"
-  status = 301
-
-[[redirects]]
-  from = "/briefing-landing-pages.html"
-  to = "/briefing/landing-pages"
-  status = 301
-
-[[redirects]]
-  from = "/briefing-identidade-visual.html"
-  to = "/briefing/identidade-visual"
-  status = 301
-
-[[redirects]]
-  from = "/portfolio/"
-  to = "/portfolio"
-  status = 301
-
-[[redirects]]
-  from = "/briefing/landing-pages/"
-  to = "/briefing/landing-pages"
-  status = 301
-
-[[redirects]]
-  from = "/briefing/identidade-visual/"
-  to = "/briefing/identidade-visual"
-  status = 301
-
-[[redirects]]
-  from = "/portfolio"
-  to = "/portfolio.html"
-  status = 200
-
-[[redirects]]
-  from = "/briefing/landing-pages"
-  to = "/briefing-landing-pages.html"
-  status = 200
-
-[[redirects]]
-  from = "/briefing/identidade-visual"
-  to = "/briefing-identidade-visual.html"
-  status = 200
-
 [[headers]]
   for = "/*"
   [headers.values]
