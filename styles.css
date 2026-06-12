@@ -1018,6 +1018,14 @@ img {
   background: rgba(8, 12, 19, 0.28);
 }
 
+.form-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .briefing-section {
   padding: 1.55rem;
   background:
@@ -1173,6 +1181,20 @@ img {
 
 .briefing-status strong {
   color: #f4ffd2;
+}
+
+.briefing-status.is-pending {
+  border-color: rgba(31, 119, 255, 0.35);
+  background: rgba(31, 119, 255, 0.12);
+}
+
+.briefing-status.is-error {
+  border-color: rgba(255, 107, 107, 0.35);
+  background: rgba(255, 107, 107, 0.12);
+}
+
+.briefing-status.is-error strong {
+  color: #ffe3e3;
 }
 
 .briefing-status-actions {

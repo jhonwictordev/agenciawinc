@@ -102,8 +102,8 @@
               <ul class="briefing-rules">
                 <li>Todos os envios desta p&aacute;gina usam a tag <strong>#BriefingMarcaWinc</strong>.</li>
                 <li>Cada briefing recebe um protocolo exclusivo para consulta e acompanhamento.</li>
-                <li>O hist&oacute;rico local fica salvo neste navegador para revis&atilde;o r&aacute;pida.</li>
-                <li>O cliente pode baixar a c&oacute;pia do briefing antes mesmo de conversar com a equipe.</li>
+                <li>O briefing completo fica salvo no Netlify Forms, em vez de permanecer neste navegador.</li>
+                <li>O WhatsApp recebe apenas um resumo curto de atendimento, sem expor todas as respostas na URL.</li>
               </ul>
             </aside>
           </div>
@@ -113,9 +113,23 @@
           <div class="container">
             <form
               class="briefing-form-shell"
+              name="briefing-identidade-visual"
+              method="POST"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
               data-briefing-form="identidade_visual"
               data-whatsapp="558291875154"
             >
+              <input type="hidden" name="form-name" value="briefing-identidade-visual" />
+              <input type="hidden" name="subject" value="Novo briefing | Posicionamento e Identidade Visual" />
+              <input type="hidden" name="briefing_protocolo" value="" />
+              <input type="hidden" name="briefing_tag" value="#BriefingMarcaWinc" />
+              <input type="hidden" name="briefing_titulo" value="Posicionamento e Identidade Visual" />
+              <input type="hidden" name="briefing_recebido_em" value="" />
+              <input type="hidden" name="briefing_origem" value="" />
+              <p class="form-honeypot">
+                <label>N&atilde;o preencha este campo <input name="bot-field" /></label>
+              </p>
               <section class="briefing-section" data-title="1. Informa&ccedil;&otilde;es b&aacute;sicas">
                 <div class="briefing-section-head">
                   <span class="section-label">1. Informa&ccedil;&otilde;es b&aacute;sicas</span>
@@ -566,9 +580,10 @@
               <section class="briefing-actions">
                 <div>
                   <span class="section-label">Enviar briefing</span>
-                  <h2>Ao enviar, o cliente &eacute; direcionado para o WhatsApp com tudo pronto.</h2>
+                  <h2>Ao enviar, salvamos primeiro e depois abrimos o WhatsApp.</h2>
                   <p class="briefing-inline-note">
-                    Isso acelera o atendimento, evita perda de contexto e deixa cada caso rastre&aacute;vel por protocolo.
+                    O briefing completo entra no painel seguro do Netlify Forms. No WhatsApp, segue
+                    apenas um resumo curto com protocolo, empresa e contato-base.
                   </p>
                 </div>
 
@@ -599,8 +614,12 @@
             </article>
 
             <article class="briefing-summary-card">
-              <span class="section-label">Hist&oacute;rico neste navegador</span>
-              <div class="briefing-history" data-briefing-history="identidade_visual"></div>
+              <span class="section-label">Acesso aos envios</span>
+              <p>
+                Por seguran&ccedil;a, n&atilde;o mantemos c&oacute;pias locais neste navegador. Os
+                briefings enviados ficam dispon&iacute;veis no painel do Netlify Forms do projeto,
+                com protocolo, data e todos os campos preenchidos.
+              </p>
             </article>
           </div>
         </section>

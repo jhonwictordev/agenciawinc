@@ -10,6 +10,7 @@
   for = "/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; upgrade-insecure-requests"
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
@@ -24,6 +25,36 @@
   for = "/briefings.js"
   [headers.values]
     Cache-Control = "public, max-age=604800, must-revalidate"
+
+[[headers]]
+  for = "/briefing-landing-pages.html"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/briefing-identidade-visual.html"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/briefing-trafego-pago.html"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/briefing-social-media.html"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/briefing-automacao-whatsapp.html"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/briefing-criacao-saas.html"
+  [headers.values]
+    Cache-Control = "no-store"
 
 [[headers]]
   for = "/assets/*"

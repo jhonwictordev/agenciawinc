@@ -1,25 +1,56 @@
-const HISTORY_STORAGE_KEY = "winc_briefings_history";
-
 const BRIEFING_CONFIG = {
   landing_pages: {
     prefix: "LP",
     tag: "#BriefingLPWinc",
-    title: "Briefing Agência Winc | Landing Pages e Funis",
+    title: "Landing Pages e Funis",
+    formName: "briefing-landing-pages",
     companyField: "empresa_nome",
     contactField: "telefone_whatsapp",
   },
   identidade_visual: {
     prefix: "ID",
     tag: "#BriefingMarcaWinc",
-    title: "Briefing Agência Winc | Posicionamento e Identidade Visual",
+    title: "Posicionamento e Identidade Visual",
+    formName: "briefing-identidade-visual",
     companyField: "empresa_nome",
     contactField: "instagram_site",
+  },
+  trafego_pago: {
+    prefix: "TG",
+    tag: "#BriefingTrafegoWinc",
+    title: "Gestao de Trafego Pago",
+    formName: "briefing-trafego-pago",
+    companyField: "empresa_nome",
+    contactField: "telefone_whatsapp_responsavel",
+  },
+  social_media: {
+    prefix: "SM",
+    tag: "#BriefingSocialWinc",
+    title: "Conteudo e Social Media",
+    formName: "briefing-social-media",
+    companyField: "empresa_nome",
+    contactField: "telefone_whatsapp_responsavel",
+  },
+  automacao_whatsapp: {
+    prefix: "AW",
+    tag: "#BriefingWhatsAppWinc",
+    title: "Automacao no WhatsApp",
+    formName: "briefing-automacao-whatsapp",
+    companyField: "empresa_nome",
+    contactField: "telefone_whatsapp_responsavel",
+  },
+  criacao_saas: {
+    prefix: "SA",
+    tag: "#BriefingSaaSWinc",
+    title: "Criacao de SaaS",
+    formName: "briefing-criacao-saas",
+    companyField: "nome_projeto",
+    contactField: "telefone_whatsapp_responsavel",
   },
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("[data-briefing-form]").forEach(initBriefingForm);
-  renderHistoryLists();
 });
 
 function initBriefingForm(form) {
@@ -30,121 +61,87 @@ function initBriefingForm(form) {
     return;
   }
 
-  const draftKey = `winc_draft_${type}`;
   const statusBox = form.querySelector(".briefing-status");
+  const submitButton = form.querySelector('button[type="submit"]');
 
-  restoreDraft(form, draftKey);
-
-  form.addEventListener("input", () => persistDraft(form, draftKey));
-  form.addEventListener("change", () => persistDraft(form, draftKey));
-
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    if (!form.reportValidity()) {
+    if (form.dataset.submitting === "true" || !form.reportValidity()) {
       return;
     }
 
     const protocol = createProtocol(config.prefix);
-    const payload = buildBriefingMessage(form, config, protocol);
+    const receivedAt = formatTimestamp(new Date());
 
-    saveHistory({
-      protocol,
-      type,
-      tag: config.tag,
-      company: payload.company,
-      contact: payload.contact,
-      createdAt: new Date().toISOString(),
-      message: payload.message,
-      whatsAppUrl: payload.whatsAppUrl,
-    });
+    setFieldValue(form, "form-name", config.formName);
+    setFieldValue(form, "briefing_protocolo", protocol);
+    setFieldValue(form, "briefing_tag", config.tag);
+    setFieldValue(form, "briefing_titulo", config.title);
+    setFieldValue(form, "briefing_recebido_em", receivedAt);
+    setFieldValue(form, "briefing_origem", window.location.href);
 
-    localStorage.removeItem(draftKey);
-    showStatus(statusBox, payload);
-    renderHistoryLists();
-    form.reset();
+    const whatsappUrl = buildWhatsAppUrl(form, config, protocol);
 
-    const popup = window.open(payload.whatsAppUrl, "_blank", "noopener");
-    if (!popup) {
-      window.location.href = payload.whatsAppUrl;
+    setSubmittingState(form, submitButton, true);
+    showPendingStatus(statusBox);
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(formData).toString(),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Netlify Forms respondeu com status ${response.status}`);
+      }
+
+      form.reset();
+      clearRuntimeFields(form);
+      showSuccessStatus(statusBox, protocol, whatsappUrl, config.tag);
+      openWhatsApp(whatsappUrl);
+    } catch (error) {
+      console.error(error);
+      showErrorStatus(statusBox);
+    } finally {
+      setSubmittingState(form, submitButton, false);
     }
   });
 }
 
-function buildBriefingMessage(form, config, protocol) {
-  const sections = [];
-
-  form.querySelectorAll(".briefing-section").forEach((section) => {
-    const title = section.dataset.title;
-    const fieldNames = [];
-    const seen = new Set();
-
-    section.querySelectorAll("[name][data-label]").forEach((field) => {
-      if (!seen.has(field.name)) {
-        seen.add(field.name);
-        fieldNames.push(field.name);
-      }
-    });
-
-    const items = fieldNames
-      .map((name) => {
-        const fields = Array.from(section.querySelectorAll(`[name="${name}"]`));
-        const label = fields[0]?.dataset.label || name;
-        const value = extractFieldValue(fields);
-
-        if (!value) {
-          return null;
-        }
-
-        return { label, value };
-      })
-      .filter(Boolean);
-
-    if (items.length) {
-      sections.push({ title, items });
-    }
-  });
-
-  const receivedAt = new Intl.DateTimeFormat("pt-BR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(new Date());
-
-  const company = getFirstFieldValue(form, config.companyField) || "Não informado";
-  const contact = getFirstFieldValue(form, config.contactField) || "Não informado";
-
+function buildWhatsAppUrl(form, config, protocol) {
+  const company = getFirstFieldValue(form, config.companyField) || "Nao informado";
+  const phone = form.dataset.whatsapp || "558291875154";
   const lines = [
-    `*${config.title}*`,
-    `Protocolo: ${protocol}`,
+    "*Novo briefing recebido*",
     `Tag: ${config.tag}`,
-    `Recebido em: ${receivedAt}`,
+    `Servico: ${config.title}`,
+    `Protocolo: ${protocol}`,
     `Empresa: ${company}`,
-    `Contato-base: ${contact}`,
-    "",
   ];
 
-  sections.forEach((section) => {
-    lines.push(`*${section.title}*`);
-    section.items.forEach((item) => {
-      lines.push(`- ${item.label}: ${item.value}`);
-    });
-    lines.push("");
-  });
+  if (config.contactField) {
+    const contact = getFirstFieldValue(form, config.contactField);
+    if (contact) {
+      lines.push(`Contato-base: ${contact}`);
+    }
+  }
 
-  const message = lines.join("\n").trim();
-  const phone = form.dataset.whatsapp || "558291875154";
-  const whatsAppUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  lines.push(
+    "",
+    "O conteudo completo foi salvo com seguranca no painel de formularios da Agencia Winc.",
+  );
 
-  return {
-    protocol,
-    company,
-    contact,
-    message,
-    whatsAppUrl,
-  };
+  return `https://wa.me/${phone}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
 
-function extractFieldValue(fields) {
+function getFirstFieldValue(form, name) {
+  const fields = Array.from(form.querySelectorAll(`[name="${name}"]`));
+
   if (!fields.length) {
     return "";
   }
@@ -165,163 +162,138 @@ function extractFieldValue(fields) {
   return first.value.trim();
 }
 
-function getFirstFieldValue(form, name) {
-  const fields = Array.from(form.querySelectorAll(`[name="${name}"]`));
-  return extractFieldValue(fields);
+function setFieldValue(form, name, value) {
+  const field = form.querySelector(`[name="${name}"]`);
+
+  if (field) {
+    field.value = value;
+  }
 }
 
-function persistDraft(form, key) {
-  const draft = {};
-  const handled = new Set();
-
-  form.querySelectorAll("[name]").forEach((field) => {
-    if (handled.has(field.name)) {
-      return;
-    }
-
-    handled.add(field.name);
-    const fields = Array.from(form.querySelectorAll(`[name="${field.name}"]`));
-    const first = fields[0];
-
-    if (first.type === "radio") {
-      draft[field.name] = fields.find((item) => item.checked)?.value || "";
-      return;
-    }
-
-    if (first.type === "checkbox") {
-      draft[field.name] = fields.filter((item) => item.checked).map((item) => item.value);
-      return;
-    }
-
-    draft[field.name] = first.value;
+function clearRuntimeFields(form) {
+  ["briefing_protocolo", "briefing_tag", "briefing_titulo", "briefing_recebido_em", "briefing_origem"].forEach((name) => {
+    setFieldValue(form, name, "");
   });
-
-  localStorage.setItem(key, JSON.stringify(draft));
 }
 
-function restoreDraft(form, key) {
-  const raw = localStorage.getItem(key);
+function setSubmittingState(form, submitButton, isSubmitting) {
+  form.dataset.submitting = isSubmitting ? "true" : "false";
 
-  if (!raw) {
+  if (!submitButton) {
     return;
   }
 
-  let draft;
-
-  try {
-    draft = JSON.parse(raw);
-  } catch {
-    return;
-  }
-
-  Object.entries(draft).forEach(([name, value]) => {
-    const fields = Array.from(form.querySelectorAll(`[name="${name}"]`));
-    if (!fields.length) {
-      return;
-    }
-
-    const first = fields[0];
-
-    if (first.type === "radio") {
-      fields.forEach((field) => {
-        field.checked = field.value === value;
-      });
-      return;
-    }
-
-    if (first.type === "checkbox") {
-      const selected = Array.isArray(value) ? value : [];
-      fields.forEach((field) => {
-        field.checked = selected.includes(field.value);
-      });
-      return;
-    }
-
-    first.value = typeof value === "string" ? value : "";
-  });
+  submitButton.disabled = isSubmitting;
+  submitButton.textContent = isSubmitting ? "Enviando com seguranca..." : "Enviar briefing e abrir WhatsApp";
 }
 
-function saveHistory(entry) {
-  let current = loadHistory();
-
-  current.unshift(entry);
-  current = current.slice(0, 20);
-  localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(current));
-}
-
-function loadHistory() {
-  let current = [];
-
-  try {
-    current = JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY) || "[]");
-  } catch {
-    current = [];
-  }
-
-  return Array.isArray(current) ? current : [];
-}
-
-function renderHistoryLists() {
-  const history = loadHistory();
-
-  document.querySelectorAll("[data-briefing-history]").forEach((container) => {
-    const type = container.dataset.briefingHistory;
-    const items = history.filter((entry) => entry.type === type).slice(0, 8);
-
-    if (!items.length) {
-      container.innerHTML =
-        '<p class="briefing-inline-note">Nenhum briefing enviado ainda neste navegador. Assim que um envio for feito, ele aparece aqui com protocolo e data.</p>';
-      return;
-    }
-
-    container.innerHTML = items
-      .map((entry) => {
-        const createdAt = new Intl.DateTimeFormat("pt-BR", {
-          dateStyle: "short",
-          timeStyle: "short",
-        }).format(new Date(entry.createdAt));
-
-        return `
-          <article class="briefing-history-item">
-            <div class="briefing-history-copy">
-              <strong>${escapeHtml(entry.company || "Empresa não informada")}</strong>
-              <span>${escapeHtml(entry.protocol)}</span>
-              <p>${escapeHtml(createdAt)} · ${escapeHtml(entry.tag)}</p>
-            </div>
-            <div class="briefing-history-actions">
-              <a href="${escapeAttribute(entry.whatsAppUrl)}" target="_blank" rel="noopener noreferrer">Abrir no WhatsApp</a>
-            </div>
-          </article>
-        `;
-      })
-      .join("");
-  });
-}
-
-function showStatus(statusBox, payload) {
+function showPendingStatus(statusBox) {
   if (!statusBox) {
     return;
   }
 
-  const blob = new Blob([payload.message], { type: "text/plain;charset=utf-8" });
-  const downloadUrl = URL.createObjectURL(blob);
+  renderStatus(statusBox, "pending", [
+    { tag: "strong", text: "Enviando briefing com seguranca..." },
+    {
+      tag: "p",
+      text: "Estamos registrando os dados no Netlify Forms antes de abrir o WhatsApp com um resumo curto.",
+    },
+  ]);
+}
 
-  if (statusBox.dataset.downloadUrl) {
-    URL.revokeObjectURL(statusBox.dataset.downloadUrl);
+function showSuccessStatus(statusBox, protocol, whatsappUrl, tag) {
+  if (!statusBox) {
+    return;
   }
 
-  statusBox.dataset.downloadUrl = downloadUrl;
+  renderStatus(statusBox, "success", [
+    { tag: "strong", text: "Briefing enviado com seguranca." },
+    {
+      tag: "p",
+      text: `Protocolo gerado: ${protocol}. O envio completo foi salvo no painel do Netlify Forms e o WhatsApp foi aberto apenas com um resumo de atendimento (${tag}).`,
+    },
+    {
+      tag: "div",
+      className: "briefing-status-actions",
+      children: [
+        {
+          tag: "a",
+          text: "Abrir WhatsApp novamente",
+          attrs: {
+            href: whatsappUrl,
+            target: "_blank",
+            rel: "noopener noreferrer",
+          },
+        },
+      ],
+    },
+  ]);
+}
+
+function showErrorStatus(statusBox) {
+  if (!statusBox) {
+    return;
+  }
+
+  renderStatus(statusBox, "error", [
+    { tag: "strong", text: "Nao foi possivel concluir o envio." },
+    {
+      tag: "p",
+      text: "Tente novamente em alguns segundos. O WhatsApp so sera aberto depois que o briefing for salvo com sucesso.",
+    },
+  ]);
+}
+
+function renderStatus(statusBox, state, nodes) {
+  statusBox.replaceChildren();
   statusBox.classList.add("is-visible");
-  statusBox.innerHTML = `
-    <strong>Briefing pronto para envio.</strong>
-    <p>O WhatsApp foi aberto com a mensagem organizada. Protocolo gerado: <strong>${payload.protocol}</strong>.</p>
-    <div class="briefing-status-actions">
-      <a href="${payload.whatsAppUrl}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp novamente</a>
-      <a href="${downloadUrl}" download="${payload.protocol}.txt">Baixar cópia em .txt</a>
-    </div>
-  `;
+  statusBox.classList.remove("is-pending", "is-success", "is-error");
+  statusBox.classList.add(`is-${state}`);
+
+  nodes.forEach((definition) => {
+    const element = document.createElement(definition.tag);
+
+    if (definition.className) {
+      element.className = definition.className;
+    }
+
+    if (definition.text) {
+      element.textContent = definition.text;
+    }
+
+    if (definition.attrs) {
+      Object.entries(definition.attrs).forEach(([name, value]) => {
+        element.setAttribute(name, value);
+      });
+    }
+
+    if (definition.children) {
+      definition.children.forEach((childDefinition) => {
+        const child = document.createElement(childDefinition.tag);
+        child.textContent = childDefinition.text || "";
+
+        if (childDefinition.attrs) {
+          Object.entries(childDefinition.attrs).forEach(([name, value]) => {
+            child.setAttribute(name, value);
+          });
+        }
+
+        element.appendChild(child);
+      });
+    }
+
+    statusBox.appendChild(element);
+  });
 
   statusBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function openWhatsApp(whatsappUrl) {
+  const popup = window.open(whatsappUrl, "_blank", "noopener");
+
+  if (!popup) {
+    window.location.href = whatsappUrl;
+  }
 }
 
 function createProtocol(prefix) {
@@ -338,18 +310,13 @@ function createProtocol(prefix) {
   return `${prefix}-${parts.join("")}`;
 }
 
+function formatTimestamp(date) {
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(date);
+}
+
 function pad(value) {
   return String(value).padStart(2, "0");
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
-
-function escapeAttribute(value) {
-  return String(value).replaceAll('"', "&quot;");
 }
