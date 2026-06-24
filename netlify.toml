@@ -6,6 +6,16 @@
   to = "/"
   status = 301
 
+[[redirects]]
+  from = "/briefing/identidade-visual"
+  to = "/briefing-identidade-visual.html"
+  status = 301
+
+[[redirects]]
+  from = "/briefing/identidade-visual/"
+  to = "/briefing-identidade-visual.html"
+  status = 301
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -53,6 +63,11 @@
 
 [[headers]]
   for = "/briefing-criacao-saas.html"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/briefing-audiovisual-imagens-aereas.html"
   [headers.values]
     Cache-Control = "no-store"
 

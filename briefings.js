@@ -47,6 +47,14 @@ const BRIEFING_CONFIG = {
     companyField: "nome_projeto",
     contactField: "telefone_whatsapp_responsavel",
   },
+  audiovisual_imagens_aereas: {
+    prefix: "AV",
+    tag: "#BriefingAudiovisualWinc",
+    title: "Producao Audiovisual e Imagens Aereas",
+    formName: "briefing-audiovisual-imagens-aereas",
+    companyField: "empresa_nome",
+    contactField: "telefone_whatsapp_responsavel",
+  },
 };
 
 document.addEventListener("DOMContentLoaded", () => {
