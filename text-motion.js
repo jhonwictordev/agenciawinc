@@ -33,7 +33,9 @@ const initTextMotion = () => {
   document.documentElement.classList.add("motion-ready");
 
   [
+    ".site-nav",
     ".hero-copy",
+    ".hero-actions",
     ".impact-copy",
     ".impact-detail",
     ".section-heading",
@@ -44,7 +46,17 @@ const initTextMotion = () => {
     ".briefing-copy",
     ".briefing-section-head",
     ".hero-points",
-    ".solution-list"
+    ".solution-list",
+    ".proof-grid",
+    ".brands-grid",
+    ".service-grid",
+    ".solutions-grid",
+    ".process-steps",
+    ".showcase-grid",
+    ".faq-list",
+    ".portfolio-grid",
+    ".portfolio-project-grid",
+    ".briefing-card-grid"
   ].forEach(addMotionSequence);
 
   [
