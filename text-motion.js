@@ -19,6 +19,12 @@ const addMotionReveal = (selector) => {
   });
 };
 
+const addMotionDrop = (selector) => {
+  document.querySelectorAll(selector).forEach((element) => {
+    element.classList.add("motion-reveal", "motion-drop");
+  });
+};
+
 const revealImmediately = (elements) => {
   elements.forEach((element) => {
     element.classList.add("motion-visible");
@@ -59,8 +65,9 @@ const initTextMotion = () => {
     ".briefing-card-grid"
   ].forEach(addMotionSequence);
 
+  addMotionDrop(".proof-card");
+
   [
-    ".proof-card",
     ".service-card",
     ".solution-card",
     ".process-step",
