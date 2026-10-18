@@ -54,6 +54,7 @@ const initTextMotion = () => {
     ".hero-points",
     ".solution-list",
     ".proof-grid",
+    ".reviews-grid",
     ".brands-grid",
     ".service-grid",
     ".solutions-grid",
@@ -69,6 +70,8 @@ const initTextMotion = () => {
 
   [
     ".service-card",
+    ".review-summary",
+    ".review-card",
     ".solution-card",
     ".process-step",
     ".showcase-card",
