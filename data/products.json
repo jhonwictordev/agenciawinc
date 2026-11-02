@@ -1,0 +1,71 @@
+[
+  {
+    "id": "camiseta-personalizada",
+    "category": "camisetas",
+    "name": "Camiseta personalizada",
+    "description": "Camiseta premium com impressão frontal e/ou traseira, criada para marcas, equipes e eventos.",
+    "price": 59.9,
+    "image": "/assets/products/camisetas-winc.png",
+    "productionDays": 7,
+    "artCreationFee": 30,
+    "active": true,
+    "stock": 200,
+    "options": {
+      "Tamanho": ["PP", "P", "M", "G", "GG", "XGG"],
+      "Cor": ["Preta", "Branca", "Cinza"],
+      "Estampa": ["Frontal", "Traseira", "Frontal e traseira"]
+    },
+    "fields": ["Texto ou orientação da estampa", "Observações"]
+  },
+  {
+    "id": "caneca-personalizada",
+    "category": "canecas",
+    "name": "Caneca personalizada",
+    "description": "Caneca em cerâmica com foto, frase ou logotipo e acabamento de alta definição.",
+    "price": 39.9,
+    "image": "/assets/products/canecas-winc.png",
+    "productionDays": 5,
+    "artCreationFee": 30,
+    "active": true,
+    "stock": 150,
+    "options": {
+      "Modelo": ["Branca", "Colorida", "Com foto", "Com frase", "Com logotipo"]
+    },
+    "fields": ["Texto personalizado", "Observações"]
+  },
+  {
+    "id": "adesivos-personalizados",
+    "category": "adesivos",
+    "name": "Adesivos personalizados",
+    "description": "Adesivos e etiquetas sob medida para produtos, embalagens, eventos e comunicação de marca.",
+    "price": 29.9,
+    "image": "/assets/products/adesivos-winc.png",
+    "productionDays": 6,
+    "artCreationFee": 30,
+    "active": true,
+    "stock": 1000,
+    "options": {
+      "Formato": ["Redondo", "Quadrado", "Retangular", "Recorte personalizado", "Etiqueta"],
+      "Tamanho": ["5 cm", "7 cm", "10 cm", "Personalizado"],
+      "Acabamento": ["Fosco", "Brilho", "Transparente"]
+    },
+    "fields": ["Medida personalizada", "Observações"]
+  },
+  {
+    "id": "convite-aniversario",
+    "category": "convites",
+    "name": "Convite de aniversário",
+    "description": "Convite exclusivo, digital ou impresso, com identidade criada para o tema da sua comemoração.",
+    "price": 49.9,
+    "image": "/assets/products/convites-winc.png",
+    "productionDays": 5,
+    "artCreationFee": 30,
+    "active": true,
+    "stock": 500,
+    "options": {
+      "Tipo": ["Infantil", "Adulto", "Temático"],
+      "Formato": ["Digital", "Impresso"]
+    },
+    "fields": ["Nome do aniversariante", "Idade", "Data e horário", "Local do evento", "Tema", "Observações"]
+  }
+]

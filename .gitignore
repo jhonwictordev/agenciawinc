@@ -5,6 +5,7 @@ Thumbs.db
 .env
 .env.*
 .netlify
+node_modules/
 *.pem
 *.key
 secrets.*

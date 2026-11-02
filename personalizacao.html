@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personalização | Agência Winc</title>
+    <meta name="description" content="Camisetas, canecas, adesivos e convites personalizados pela Agência Winc." />
+    <meta name="theme-color" content="#020305" />
+    <link rel="canonical" href="https://agenciawinc.netlify.app/personalizacao" />
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css?v=20261102a" />
+    <link rel="stylesheet" href="/personalizacao.css?v=20261102a" />
+    <script src="/personalizacao.js?v=20261102a" type="module"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap store-nav">
+        <a class="brand" href="/" aria-label="Agência Winc"><img class="brand-logo" src="/assets/logo-winc-web.webp" alt="Agência Winc" /></a>
+        <nav class="site-nav" aria-label="Principal">
+          <a href="/">Início</a><a href="/portfolio">Portfólio</a><a href="/#servicos">Serviços</a><a href="/#solucoes">Soluções</a><a href="/personalizacao" aria-current="page">Personalização</a><a href="/#processo">Processo</a><a href="/#faq">FAQ</a><a href="/#contato">Contato</a>
+        </nav>
+        <button class="cart-trigger" id="cart-trigger" type="button" aria-label="Abrir carrinho">Carrinho <span id="cart-count">0</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="store-hero">
+        <div class="container store-hero-grid">
+          <div>
+            <span class="section-label">Personalização Winc</span>
+            <h1>Personalize do <span>seu jeito.</span></h1>
+            <p>Transformamos suas ideias em produtos exclusivos, com criação cuidadosa e acabamento profissional.</p>
+            <a class="button button-primary" href="#produtos">Explorar produtos</a>
+          </div>
+          <div class="store-hero-orbit" aria-hidden="true"><strong>IDEIA</strong><span>→</span><strong>PRODUTO</strong></div>
+        </div>
+      </section>
+
+      <section class="store-catalog" id="produtos">
+        <div class="container">
+          <div class="store-heading"><div><span class="section-label">Catálogo</span><h2>Escolha, personalize e peça.</h2></div><p>Valores iniciais configuráveis. O total é recalculado antes do pagamento.</p></div>
+          <form class="store-filters" id="filters" role="search">
+            <label><span>Buscar</span><input id="search" type="search" placeholder="Nome do produto" /></label>
+            <label><span>Categoria</span><select id="category"><option value="">Todas</option><option value="camisetas">Camisetas</option><option value="canecas">Canecas</option><option value="adesivos">Adesivos</option><option value="convites">Convites</option></select></label>
+            <label><span>Preço máximo</span><input id="max-price" type="range" min="30" max="150" value="150" /><output id="price-output">R$ 150</output></label>
+            <label><span>Ordenar</span><select id="sort"><option value="recent">Mais recentes</option><option value="asc">Menor preço</option><option value="desc">Maior preço</option></select></label>
+          </form>
+          <div class="product-grid" id="product-grid" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="store-how"><div class="container store-how-grid"><article><span>01</span><h3>Escolha</h3><p>Encontre o produto ideal e defina formato, tamanho e acabamento.</p></article><article><span>02</span><h3>Personalize</h3><p>Envie sua arte ou solicite apoio criativo da equipe Winc.</p></article><article><span>03</span><h3>Aprove</h3><p>Validamos o material antes de iniciar a produção.</p></article><article><span>04</span><h3>Receba</h3><p>Retire no estabelecimento ou escolha a entrega disponível.</p></article></div></section>
+    </main>
+
+    <dialog id="product-dialog" class="store-dialog"><form method="dialog" class="dialog-shell" id="product-form"><button class="dialog-close" value="cancel" aria-label="Fechar">×</button><div id="product-detail"></div></form></dialog>
+    <aside class="cart-drawer" id="cart-drawer" aria-hidden="true" aria-label="Carrinho"><div class="cart-head"><h2>Seu carrinho</h2><button id="cart-close" type="button" aria-label="Fechar carrinho">×</button></div><div id="cart-items" class="cart-items"></div><div class="cart-summary"><div><span>Subtotal</span><strong id="cart-subtotal">R$ 0,00</strong></div><p>Frete calculado após informar a modalidade.</p><button class="button button-primary" id="checkout-trigger" type="button">Continuar para o checkout</button></div></aside><div class="drawer-backdrop" id="drawer-backdrop"></div>
+    <dialog id="checkout-dialog" class="store-dialog"><form class="dialog-shell checkout-form" id="checkout-form"><button class="dialog-close" type="button" data-close-checkout aria-label="Fechar">×</button><span class="section-label">Checkout seguro</span><h2>Dados do pedido</h2><label>Nome completo<input name="name" required autocomplete="name" /></label><label>E-mail<input name="email" type="email" required autocomplete="email" /></label><label>Telefone<input name="phone" required autocomplete="tel" /></label><fieldset><legend>Recebimento</legend><label><input type="radio" name="delivery" value="pickup" checked /> Retirada</label><label><input type="radio" name="delivery" value="delivery" /> Entrega</label></fieldset><label>CEP<input name="postalCode" inputmode="numeric" /></label><label>Endereço<textarea name="address"></textarea></label><p class="checkout-notice">O pagamento acontece no ambiente oficial do Mercado Pago. Nenhum dado de cartão é armazenado pela Winc.</p><button class="button button-primary" type="submit">Finalizar no Mercado Pago</button><p id="checkout-status" role="status"></p></form></dialog>
+    <div class="toast" id="toast" role="status"></div>
+  </body>
+</html>
